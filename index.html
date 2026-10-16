@@ -116,6 +116,16 @@
   .share img{width:100%;max-width:420px;border-radius:12px;border:1px solid var(--line);display:block;margin:14px auto}
   footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
 
+  /* 背景資料 */
+  .field{display:block;margin:0 0 18px}
+  .field span{display:block;font-weight:700;margin-bottom:6px}
+  .field select{
+    width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;
+    border:1.5px solid var(--line);background:var(--card);color:var(--ink)
+  }
+  .consent{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:#4a4740;margin-top:6px}
+  .consent input{width:20px;height:20px;margin-top:3px;accent-color:var(--accent);flex:none}
+
   @media (max-width:420px){
     .intro h1{font-size:29px}
     .qtext{font-size:20px;min-height:120px}
@@ -138,7 +148,7 @@
     <div class="note">
       <b>先說清楚：</b>這不是在判斷誰對誰錯，也不是在分誰得救，而是一張幫你認識自己的地圖。<br>
       共 50 題加 1 題彩蛋，大約 15 分鐘。照你真實的想法選就好，沒有標準答案。<br>
-      你的答案只留在你自己的瀏覽器裡，不會被收集。
+      做完之後，我們會<b>匿名</b>收集測驗結果做統計，不會知道你是誰。如果不想送出，最後一頁可以取消勾選。
     </div>
     <div class="btn-row">
       <button class="btn" id="startBtn">開始測驗</button>
@@ -156,6 +166,29 @@
       <button class="linkbtn" id="prevBtn">← 上一題</button>
       <button class="linkbtn" id="nextBtn">下一題 →</button>
     </div>
+  </section>
+
+  <!-- 背景資料（選填） -->
+  <section id="bg" class="hidden">
+    <div class="topbar"><span class="chip">最後一步</span><span>選填</span></div>
+    <div class="progress"><div style="width:100%"></div></div>
+    <div class="qtext" style="min-height:0">最後兩個小問題，幫助我們做統計（可以跳過）</div>
+    <label class="field">
+      <span>你現在聚會的教會類型</span>
+      <select id="churchSel"></select>
+    </label>
+    <label class="field">
+      <span>你信主多久了</span>
+      <select id="yearsSel"></select>
+    </label>
+    <label class="consent">
+      <input type="checkbox" id="consentChk" checked>
+      <span>我願意匿名送出我的測驗結果，讓節目做統計分析</span>
+    </label>
+    <div class="btn-row" style="margin-top:22px">
+      <button class="btn" id="finishBtn">看我的結果</button>
+    </div>
+    <div class="nav"><button class="linkbtn" id="bgBackBtn">← 回到上一題</button><span></span></div>
   </section>
 
   <!-- 結果畫面 -->
