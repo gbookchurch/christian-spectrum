@@ -223,8 +223,20 @@
    ============================================ */
 const CONFIG = {
   podcastName: "教會小本本 Podcast",
-  storageKey: "spectrum-quiz-v1"
+  storageKey: "spectrum-quiz-v1",
+  sentKey: "spectrum-quiz-sent-v1",
+  // 把 Apps Script 發布後拿到的網址貼在引號裡；留空就不會送出資料
+  endpoint: ""
 };
+
+/* 背景資料選項（選填） */
+const CHURCH_TYPES = [
+  "長老會", "浸信會", "靈糧堂／靈恩教會", "聖公會／信義會", "衛理公會／循理會",
+  "召會", "真耶穌教會", "天主教", "其他獨立教會", "其他", "目前沒有固定聚會"
+];
+const YEARS = [
+  "還沒信主／慕道中", "未滿 1 年", "1–5 年", "6–10 年", "11–20 年", "20 年以上"
+];
 
 /* ============================================
    六個軸
@@ -299,7 +311,7 @@ const AXES = {
 const Q = [
   // 神學立場 A 聖經觀
   { a: "theo", g: 0, t: "聖經裡的歷史和科學記載，都是完全準確、沒有錯誤的。" },
-  { a: "theo", g: 0, r: true, t: "創世記前幾章可以當成詩歌或神學故事來讀，不一定要當作歷史和科學紀錄。" },
+  { a: "theo", g: 0, r: true, t: "像大洪水、約拿在大魚肚子裡這類故事，重點是要傳達的信息，不一定要當作真實發生過的事。" },
   { a: "theo", g: 0, r: true, t: "摩西五經不一定都是摩西本人寫的，但這不影響它是神的話。" },
   { a: "theo", g: 0, t: "讀經時，經文字面的意思通常就是神要說的，不太需要用歷史背景去重新解釋。" },
   { a: "theo", g: 0, r: true, t: "聖經裡有些教導反映的是當時的文化限制，今天不一定要照著做。" },
@@ -381,7 +393,7 @@ const BONUS = {
   ]
 };
 
-const LIKERT = ["非常不同意", "不同意", "普通", "同意", "非常同意"];
+const LIKERT = ["非常不同意", "不同意", "普通／不確定", "同意", "非常同意"];
 
 /* ============================================
    狀態與儲存
@@ -408,7 +420,7 @@ function clearSave() {
    ============================================ */
 const $ = id => document.getElementById(id);
 function show(id) {
-  ["intro", "quiz", "result"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  ["intro", "quiz", "bg", "result"].forEach(s => $(s).classList.toggle("hidden", s !== id));
   window.scrollTo(0, 0);
 }
 
@@ -470,7 +482,60 @@ function next() {
   const hasAns = i === Q.length ? state.bonus !== null : state.ans[i] !== null;
   if (!hasAns) return;
   if (i < Q.length) { state.i++; save(); renderQ(); }
-  else { state.done = true; save(); showResult(); }
+  else { show("bg"); }
+}
+
+/* ============================================
+   背景資料與送出
+   ============================================ */
+function fillSelect(el, list) {
+  el.innerHTML = '<option value="">（不想回答）</option>' +
+    list.map(t => `<option value="${t}">${t}</option>`).join("");
+}
+
+function alreadySent() {
+  try { return localStorage.getItem(CONFIG.sentKey) === "1"; } catch (e) { return false; }
+}
+
+function sendResult() {
+  if (!CONFIG.endpoint || alreadySent()) return;
+  const R = score();
+  const g = R.gov;
+  const kindName = k => AXES.gov.kinds[k].name;
+  const payload = {
+    church: state.church || "",
+    years: state.years || "",
+    theo: R.theo.total, theoZone: R.theo.zone.name,
+    theoBible: R.theo.sub[0], theoCore: R.theo.sub[1], theoModern: R.theo.sub[2],
+    salv: R.salv.total, salvZone: R.salv.zone.name,
+    gift: R.gift.total, giftZone: R.gift.zone.name,
+    wors: R.wors.total, worsZone: R.wors.zone.name,
+    gov: g.kinds.map(kindName).join("＋"),
+    govPastor: g.counts.pastor, govElder: g.counts.elder, govCong: g.counts.cong,
+    poli: R.poli.total, poliZone: R.poli.zone.name,
+    poliEcon: R.poli.sub[0], poliGov: R.poli.sub[1], poliSociety: R.poli.sub[2],
+    fear: state.bonus !== null ? BONUS.o[state.bonus] : "",
+    // 原始答案：量表題是 1 到 5（沒有反向換算），治理題是選到的制度
+    answers: Q.map((q, i) => q.o ? kindName(q.o[state.ans[i]][1]) : state.ans[i] + 1)
+  };
+  try {
+    fetch(CONFIG.endpoint, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    localStorage.setItem(CONFIG.sentKey, "1");
+  } catch (e) {}
+}
+
+function finish() {
+  state.church = $("churchSel").value;
+  state.years = $("yearsSel").value;
+  state.done = true;
+  save();
+  if ($("consentChk").checked) sendResult();
+  showResult();
 }
 function prev() {
   if (state.i > 0) { state.i--; save(); renderQ(); }
@@ -709,6 +774,10 @@ $("resumeBtn").onclick = () => { state = saved; show("quiz"); renderQ(); };
 $("prevBtn").onclick = prev;
 $("nextBtn").onclick = next;
 $("makeCardBtn").onclick = makeCard;
+fillSelect($("churchSel"), CHURCH_TYPES);
+fillSelect($("yearsSel"), YEARS);
+$("finishBtn").onclick = finish;
+$("bgBackBtn").onclick = () => { show("quiz"); renderQ(); };
 $("restartBtn").onclick = () => { clearSave(); state = { i: 0, ans: Array(Q.length).fill(null), bonus: null, done: false }; show("intro"); $("resumeBtn").classList.add("hidden"); };
 </script>
 </body>
