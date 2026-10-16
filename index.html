@@ -130,6 +130,11 @@
     .intro h1{font-size:29px}
     .qtext{font-size:20px;min-height:120px}
     .seg{font-size:11px}
+    .zone-name{font-size:23px}
+    .sub{grid-template-columns:1fr;gap:4px;margin:10px 0}
+    .subpoles{margin-left:0}
+    .gov-chips span{font-size:13px;padding:3px 10px}
+    .closing .serif{font-size:18px}
   }
 </style>
 </head>
@@ -661,79 +666,108 @@ async function makeCard() {
     ]);
   } catch (e) {}
 
-  const W = 1080, H = 1350;
+  // 1080 x 1920：手機直式、IG 限時動態的比例，每一軸有足夠的空間
+  const W = 1080, H = 1920;
   const c = document.createElement("canvas");
   c.width = W; c.height = H;
   const x = c.getContext("2d");
   const serif = '"Noto Serif TC", serif';
   const sans = '"Noto Sans TC", sans-serif';
+  const PAD = 90;
 
   x.fillStyle = "#f6f1e7"; x.fillRect(0, 0, W, H);
 
+  // 標題
+  x.textBaseline = "alphabetic";
   x.fillStyle = "#b5532f";
-  x.font = `700 28px ${sans}`;
-  x.fillText("我的基督徒光譜", 80, 120);
+  x.font = `700 32px ${sans}`;
+  x.fillText("我的基督徒光譜", PAD, 150);
   x.fillStyle = "#2b2a28";
-  x.font = `900 64px ${serif}`;
-  x.fillText("基督徒的光譜圖鑑", 80, 200);
+  x.font = `900 76px ${serif}`;
+  x.fillText("基督徒的光譜圖鑑", PAD, 245);
+  x.fillStyle = "#ddd3c1";
+  x.fillRect(PAD, 290, W - PAD * 2, 3);
 
-  let y = 290;
-  const rowH = 150;
-  const barX = 80, barW = W - 160, barH = 22;
+  // 六個軸，每列固定高度，彼此不重疊
+  let y = 360;
+  const rowH = 205;
+  const barX = PAD, barW = W - PAD * 2, barH = 20, dotR = 18;
 
   for (const key of Object.keys(AXES)) {
     const ax = AXES[key];
     const r = R[key];
-    x.fillStyle = "#857d70";
-    x.font = `500 26px ${sans}`;
-    x.fillText(ax.name, barX, y);
 
-    let label;
-    if (ax.type === "choice") {
-      label = r.kinds.map(k => ax.kinds[k].name).join("＋");
-    } else {
-      label = r.zone.name;
-    }
+    // 軸名稱（左）＋結果（右，大字）
+    x.fillStyle = "#857d70";
+    x.font = `500 30px ${sans}`;
+    x.textAlign = "left";
+    x.fillText(ax.name, barX, y + 30);
+
+    const label = ax.type === "choice"
+      ? r.kinds.map(k => ax.kinds[k].name).join("＋")
+      : r.zone.name;
     x.fillStyle = "#b5532f";
-    x.font = `900 44px ${serif}`;
-    x.fillText(label, barX, y + 54);
+    x.font = `900 52px ${serif}`;
+    x.textAlign = "right";
+    fitText(x, label, barX + barW, y + 38, barW * 0.62, 52, `900 ? ${serif}`);
+    x.textAlign = "left";
 
     if (ax.type !== "choice") {
-      const by = y + 80;
+      const by = y + 82;
       x.fillStyle = "#e6dac5";
-      roundRect(x, barX, by, barW, barH, 11); x.fill();
-      const p = pos(r.total, ax.min, ax.max, ax.highSide);
+      roundRect(x, barX, by, barW, barH, barH / 2); x.fill();
+      let p = pos(r.total, ax.min, ax.max, ax.highSide);
+      const cx = Math.min(barX + barW - dotR, Math.max(barX + dotR, barX + p * barW));
       x.fillStyle = "#2b2a28";
-      x.beginPath(); x.arc(barX + p * barW, by + barH / 2, 17, 0, Math.PI * 2); x.fill();
+      x.beginPath(); x.arc(cx, by + barH / 2, dotR, 0, Math.PI * 2); x.fill();
       x.fillStyle = "#857d70";
-      x.font = `400 22px ${sans}`;
-      x.textAlign = "left"; x.fillText(ax.leftLabel, barX, by + 56);
-      x.textAlign = "right"; x.fillText(ax.rightLabel, barX + barW, by + 56);
+      x.font = `400 26px ${sans}`;
+      x.textAlign = "left"; x.fillText(ax.leftLabel, barX, by + 66);
+      x.textAlign = "right"; x.fillText(ax.rightLabel, barX + barW, by + 66);
       x.textAlign = "left";
     } else {
-      x.fillStyle = "#857d70";
-      x.font = `400 24px ${sans}`;
-      const parts = Object.keys(ax.kinds).map(k => `${ax.kinds[k].name} ${r.counts[k]}`);
-      x.fillText(parts.join("　·　"), barX, y + 100);
+      // 教會治理：三個小膠囊
+      let cx = barX;
+      const cy = y + 78;
+      x.font = `500 28px ${sans}`;
+      for (const k of Object.keys(ax.kinds)) {
+        const t = `${ax.kinds[k].name} ${r.counts[k]}`;
+        const tw = x.measureText(t).width + 44;
+        const on = r.kinds.includes(k);
+        x.fillStyle = on ? "#b5532f" : "#efe6d6";
+        roundRect(x, cx, cy, tw, 56, 28); x.fill();
+        x.fillStyle = on ? "#ffffff" : "#5e574c";
+        x.fillText(t, cx + 22, cy + 38);
+        cx += tw + 16;
+      }
+    }
+
+    // 分隔線
+    if (key !== "poli") {
+      x.fillStyle = "#e6dac5";
+      x.fillRect(barX, y + rowH - 28, barW, 2);
     }
     y += rowH;
   }
 
   // 彩蛋
   if (state.bonus !== null) {
+    const boxY = H - 300, boxH = 150;
     x.fillStyle = "#2b2a28";
-    roundRect(x, 60, H - 210, W - 120, 100, 20); x.fill();
-    x.fillStyle = "#f6f1e7";
-    x.font = `700 32px ${sans}`;
+    roundRect(x, PAD - 20, boxY, W - (PAD - 20) * 2, boxH, 24); x.fill();
     x.textAlign = "center";
-    x.fillText(`我最怕基督教失去：${BONUS.o[state.bonus]}`, W / 2, H - 148);
+    x.fillStyle = "#d9cfbd";
+    x.font = `500 28px ${sans}`;
+    x.fillText("我最怕基督教失去", W / 2, boxY + 56);
+    x.fillStyle = "#f6f1e7";
+    fitText(x, BONUS.o[state.bonus], W / 2, boxY + 112, W - PAD * 2 - 40, 44, `700 ? ${sans}`);
     x.textAlign = "left";
   }
 
   x.fillStyle = "#857d70";
-  x.font = `400 22px ${sans}`;
+  x.font = `400 26px ${sans}`;
   x.textAlign = "center";
-  x.fillText(CONFIG.podcastName + "　·　你的基督徒光譜，長什麼樣子？", W / 2, H - 50);
+  x.fillText(CONFIG.podcastName + "　·　你的基督徒光譜，長什麼樣子？", W / 2, H - 80);
   x.textAlign = "left";
 
   const url = c.toDataURL("image/png");
@@ -742,6 +776,17 @@ async function makeCard() {
   $("cardHint").classList.remove("hidden");
   $("dlBtn").href = url;
   $("dlBtn").classList.remove("hidden");
+}
+
+// 文字太長時自動縮小字級，避免超出範圍；fontTpl 裡的 ? 會換成字級
+function fitText(ctx, text, tx, ty, maxW, size, fontTpl) {
+  let s = size;
+  ctx.font = fontTpl.replace("?", s + "px");
+  while (ctx.measureText(text).width > maxW && s > 20) {
+    s -= 2;
+    ctx.font = fontTpl.replace("?", s + "px");
+  }
+  ctx.fillText(text, tx, ty);
 }
 
 function roundRect(ctx, x, y, w, h, r) {
