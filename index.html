@@ -108,8 +108,10 @@
     padding:0;margin:14px 0;overflow:hidden
   }
   /* 結果 Header：上方圓角跟著卡片，下方直接接白色內容區 */
-  .card-head{background:var(--ax);color:var(--axh);padding:16px 18px 17px;margin:-1px -1px 0}
-  .card-body{padding:4px 18px 18px}
+  .card-head{background:var(--axs);color:var(--ink);border-left:5px solid var(--ax);border-bottom:1px solid rgba(43,42,40,.06);padding:16px 20px 17px 15px;margin:-1px -1px 0;text-align:center}
+  .card-head .axis-name{color:var(--axh)}
+  .card-head .edge-badge{color:var(--axh);opacity:1}
+  .card-body{padding:6px 18px 18px}
   .axis-name{font-size:13.5px;font-weight:700;letter-spacing:.08em;line-height:1.4}
   .zone-name{font-family:"Noto Serif TC",serif;font-size:32px;font-weight:900;margin:2px 0 0;line-height:1.3}
   .edge-badge{display:inline-flex;align-items:center;gap:7px;margin-top:6px;font-size:12px;font-weight:500;letter-spacing:.02em;opacity:.92}
@@ -445,14 +447,14 @@ const BONUS = {
 const LIKERT = ["非常不同意", "不同意", "普通／不確定", "同意", "非常同意"];
 
 /* 六軸輔助色（只是視覺，跟計分無關） */
-// c：主色（圓點、marker、色塊、結果 Header 底色）　s：淺底色　t：文字用的加深色　h：Header 上的文字色（黃、琥珀底用深棕灰）
+// c：主色（圓點、marker、色塊、結果 Header 底色）　s：淺底色　t：文字用的加深色　h：Header 淺底上的軸線名稱色（再加深一階，確保對比 ≥ 4.5）
 const AXIS_STYLE = {
-  theo: { c: "#B94F28", s: "#F5E2D8", t: "#9E3F1C", h: "#ffffff" },
-  salv: { c: "#E66A27", s: "#F9E5D4", t: "#B9531A", h: "#ffffff" },
-  gift: { c: "#E99A24", s: "#F8EBD2", t: "#A86A12", h: "#342F27" },
-  wors: { c: "#D3A62A", s: "#F4EDCF", t: "#8E6E14", h: "#342F27" },
-  gov:  { c: "#7C873C", s: "#E9ECD8", t: "#5F6A2B", h: "#ffffff" },
-  poli: { c: "#4F7653", s: "#DEE9DF", t: "#3F6243", h: "#ffffff" }
+  theo: { c: "#B94F28", s: "#F5E2D8", t: "#9E3F1C", h: "#9E3F1C" },
+  salv: { c: "#E66A27", s: "#F9E5D4", t: "#B9531A", h: "#9F4413" },
+  gift: { c: "#E99A24", s: "#F8EBD2", t: "#A86A12", h: "#8A5608" },
+  wors: { c: "#D3A62A", s: "#F4EDCF", t: "#8E6E14", h: "#74590E" },
+  gov:  { c: "#7C873C", s: "#E9ECD8", t: "#5F6A2B", h: "#5F6A2B" },
+  poli: { c: "#4F7653", s: "#DEE9DF", t: "#3F6243", h: "#3F6243" }
 };
 const axVars = key => `--ax:${AXIS_STYLE[key].c};--axs:${AXIS_STYLE[key].s};--axt:${AXIS_STYLE[key].t};--axh:${AXIS_STYLE[key].h};--axa:${hexA(AXIS_STYLE[key].c, 0.38)}`;
 
