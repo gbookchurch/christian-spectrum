@@ -108,7 +108,8 @@
     padding:20px 18px 18px;margin:14px 0
   }
   .axis-name{font-size:13.5px;color:var(--muted);font-weight:700;letter-spacing:.06em;display:flex;align-items:center;gap:8px}
-  .axis-name i{width:8px;height:8px;border-radius:50%;background:var(--ax);display:inline-block}
+  .axis-name i{width:8px;height:8px;border-radius:50%;background:var(--ax);display:inline-block;position:relative;flex:none;margin-right:30px}
+  .axis-name i::after{content:"";position:absolute;left:14px;top:50%;width:24px;height:2px;margin-top:-1px;border-radius:1px;background:var(--ax)}
   .zone-name{font-family:"Noto Serif TC",serif;font-size:32px;font-weight:900;margin:2px 0 0;color:var(--ink);line-height:1.35}
   .edge-badge{display:inline-flex;align-items:center;gap:7px;margin-top:4px;font-size:12.5px;font-weight:700;color:var(--axt);letter-spacing:.02em}
   .edge-badge::before{content:"";width:16px;height:1.5px;background:currentColor;opacity:.7}
@@ -137,7 +138,7 @@
   .subbar{position:relative;height:6px;background:var(--zone1);border-radius:999px}
   .subbar i{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:var(--ax);border:2px solid var(--card);box-shadow:0 0 0 1px rgba(43,42,40,.15);transform:translate(-50%,-50%)}
   .gov-chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
-  .gov-chips span{border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:13.5px;background:var(--paper);color:var(--ink-2)}
+  .gov-chips span{border:1px solid #ece5d8;border-radius:999px;padding:3px 12px;font-size:13.5px;background:transparent;color:var(--muted);font-weight:500}
   .gov-chips span.on{background:var(--ax);border-color:var(--ax);color:#fff;font-weight:700}
   .small{font-size:13.5px;color:var(--muted);margin-top:10px}
   .subs + .small{margin-top:16px}
