@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>基督徒的光譜圖鑑：你是哪一種？</title>
+<meta name="description" content="50 題，看看你在神學、救恩觀、恩賜、敬拜、教會治理和政治上的位置。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f6f1e7;
+    --card:#fffdf8;
+    --ink:#2b2a28;
+    --muted:#857d70;
+    --line:#ddd3c1;
+    --accent:#b5532f;
+    --accent-soft:#f1dccf;
+    --blue:#3f6b8a;
+    --zone1:#efe6d6;
+    --zone2:#e6dac5;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC",system-ui,sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:24px 16px 64px}
+  h1,h2,h3,.serif{font-family:"Noto Serif TC",serif}
+  button{font:inherit;cursor:pointer}
+  .hidden{display:none !important}
+
+  /* intro */
+  .intro{padding-top:28px}
+  .kicker{font-size:13px;letter-spacing:.2em;color:var(--accent);font-weight:700}
+  .intro h1{font-size:34px;line-height:1.3;margin:10px 0 18px;font-weight:900}
+  .intro p{margin:0 0 14px;color:#4a4740}
+  .note{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;margin:22px 0;font-size:15px;color:#4a4740
+  }
+  .note b{color:var(--ink)}
+  .axes-list{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}
+  .axes-list span{
+    border:1px solid var(--line);background:var(--card);border-radius:999px;
+    padding:4px 12px;font-size:14px
+  }
+  .btn{
+    display:inline-block;border:none;border-radius:12px;padding:14px 22px;
+    background:var(--ink);color:#fff;font-weight:700;font-size:16px
+  }
+  .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+
+  /* quiz */
+  .topbar{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--muted);margin-bottom:8px}
+  .chip{background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:999px;padding:3px 12px;font-size:13px}
+  .progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:28px}
+  .progress > div{height:100%;background:var(--accent);width:0;transition:width .25s}
+  .qtext{font-family:"Noto Serif TC",serif;font-size:23px;line-height:1.55;font-weight:700;margin:6px 0 26px;min-height:110px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:12px;
+    padding:13px 16px;font-size:16px;color:var(--ink);transition:border-color .15s, background .15s
+  }
+  .opt:hover{border-color:#bfb19a}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .likert .opt{display:flex;align-items:center;gap:12px}
+  .dot{width:18px;height:18px;border-radius:50%;border:2px solid #bfb19a;flex:none}
+  .opt.sel .dot{border-color:var(--accent);background:var(--accent)}
+  .nav{display:flex;justify-content:space-between;margin-top:26px}
+  .linkbtn{background:none;border:none;color:var(--muted);padding:8px 0;font-size:15px}
+  .linkbtn:disabled{opacity:.35;cursor:default}
+
+  /* result */
+  .res-head{text-align:center;padding:18px 0 8px}
+  .res-head h1{font-size:28px;margin:6px 0 8px;font-weight:900}
+  .res-head p{color:#4a4740;margin:0}
+  .axis-card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 18px 16px;margin:16px 0
+  }
+  .axis-name{font-size:14px;color:var(--muted);font-weight:500}
+  .zone-name{font-family:"Noto Serif TC",serif;font-size:26px;font-weight:900;margin:2px 0 12px;color:var(--accent)}
+  .bar{position:relative;height:30px;border-radius:8px;overflow:hidden;display:flex}
+  .seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#7a715f;white-space:nowrap;overflow:hidden}
+  .seg:nth-child(odd){background:var(--zone1)}
+  .seg:nth-child(even){background:var(--zone2)}
+  .seg.on{background:var(--accent);color:#fff;font-weight:700}
+  .marker-wrap{position:relative;height:14px;margin-top:2px}
+  .marker{position:absolute;top:0;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:10px solid var(--ink);transform:translateX(-7px)}
+  .poles{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+  .desc{margin:12px 0 0;font-size:15.5px;color:#3d3a34}
+  .subs{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+  .sub{display:grid;grid-template-columns:7.5em 1fr;align-items:center;gap:10px;font-size:13.5px;margin:6px 0}
+  .subbar{position:relative;height:8px;background:var(--zone1);border-radius:999px}
+  .subbar i{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;background:var(--blue);transform:translateX(-7px)}
+  .subpoles{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-left:calc(7.5em + 10px)}
+  .gov-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+  .gov-chips span{border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:13.5px;background:var(--paper)}
+  .gov-chips span.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+  .small{font-size:13.5px;color:var(--muted);margin-top:10px}
+  .closing{
+    text-align:center;padding:22px 18px;margin:22px 0;border-radius:16px;
+    background:var(--ink);color:#f6f1e7
+  }
+  .closing p{margin:6px 0}
+  .closing .serif{font-size:20px;font-weight:700}
+  .share{text-align:center;margin:26px 0}
+  .share img{width:100%;max-width:420px;border-radius:12px;border:1px solid var(--line);display:block;margin:14px auto}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+
+  @media (max-width:420px){
+    .intro h1{font-size:29px}
+    .qtext{font-size:20px;min-height:120px}
+    .seg{font-size:11px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 開始畫面 -->
+  <section id="intro" class="intro">
+    <div class="kicker" id="kicker"></div>
+    <h1>基督徒的光譜圖鑑<br>你是哪一種？</h1>
+    <p>福音派、靈恩、加爾文、自由派、左右派……這些詞我們常常全部叫做「派」，但它們其實在分完全不同的東西。</p>
+    <p>這份測驗會從六條光譜，畫出你的基督徒樣子。</p>
+    <div class="axes-list">
+      <span>神學立場</span><span>救恩觀</span><span>恩賜立場</span><span>敬拜取向</span><span>教會治理</span><span>政治立場</span>
+    </div>
+    <div class="note">
+      <b>先說清楚：</b>這不是在判斷誰對誰錯，也不是在分誰得救，而是一張幫你認識自己的地圖。<br>
+      共 50 題加 1 題彩蛋，大約 15 分鐘。照你真實的想法選就好，沒有標準答案。<br>
+      你的答案只留在你自己的瀏覽器裡，不會被收集。
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="startBtn">開始測驗</button>
+      <button class="btn secondary hidden" id="resumeBtn">繼續上次的進度</button>
+    </div>
+  </section>
+
+  <!-- 作答畫面 -->
+  <section id="quiz" class="hidden">
+    <div class="topbar"><span class="chip" id="axisChip"></span><span id="counter"></span></div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts"></div>
+    <div class="nav">
+      <button class="linkbtn" id="prevBtn">← 上一題</button>
+      <button class="linkbtn" id="nextBtn">下一題 →</button>
+    </div>
+  </section>
+
+  <!-- 結果畫面 -->
+  <section id="result" class="hidden">
+    <div class="res-head">
+      <div class="kicker">你的基督徒光譜</div>
+      <h1>你不是「一種」</h1>
+      <p>下面是你在六條光譜上的位置。</p>
+    </div>
+    <div id="resCards"></div>
+    <div class="closing">
+      <p id="fearLine"></p>
+      <p class="serif">比起「你是哪一派」，<br>更好的問題是：「這一題你站哪裡？你為什麼這樣想？」</p>
+    </div>
+    <div class="share">
+      <button class="btn" id="makeCardBtn">產生我的光譜卡</button>
+      <img id="cardImg" class="hidden" alt="我的光譜卡">
+      <div id="cardHint" class="small hidden">手機可以長按圖片儲存，電腦可以按下面的按鈕下載。</div>
+      <div class="btn-row" style="justify-content:center;margin-top:10px">
+        <a class="btn secondary hidden" id="dlBtn" download="我的基督徒光譜.png">下載圖片</a>
+        <button class="btn secondary" id="restartBtn">重新作答</button>
+      </div>
+    </div>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+/* ============================================
+   可以自己改的設定
+   ============================================ */
+const CONFIG = {
+  podcastName: "教會小本本 Podcast",
+  storageKey: "spectrum-quiz-v1"
+};
+
+/* ============================================
+   六個軸
+   highSide：分數高的那端放在光譜左邊還是右邊
+   ============================================ */
+const AXES = {
+  theo: {
+    name: "神學立場", min: 15, max: 75, highSide: "left",
+    leftLabel: "基要", rightLabel: "進步",
+    zones: [
+      { min: 64, max: 75, name: "基要", desc: "你覺得信仰有一些不能動的底線，一改就不再是基督教。面對現代世界的挑戰，你寧可站穩，也不要一直退。你最擔心的是：如果什麼都可以重新解釋，最後還剩下什麼？" },
+      { min: 52, max: 63, name: "保守", desc: "你很看重聖經權威和傳統信仰，但保守不等於封閉。你願意跟科學、歷史研究和不同宗派對話，只是核心不讓步。" },
+      { min: 37, max: 51, name: "中間", desc: "你對很多核心信仰很傳統，但碰到演化、女性牧職、某些倫理經文時，你常常覺得「這題沒有那麼簡單」。你願意多看背景，不急著下結論。" },
+      { min: 25, max: 36, name: "自由", desc: "你在意信仰能不能誠實面對現代知識。科學和歷史研究對你來說不是信仰的敵人，你反而擔心教會只會一直說「我不接受」。" },
+      { min: 15, max: 24, name: "進步", desc: "你很在意教會有沒有把文化偏見和既有權力，說成「這就是上帝的意思」。你常會問：誰沒有聲音？誰被排除？誰承受最多傷害？" }
+    ],
+    groups: ["聖經觀", "核心信仰", "面對現代與文化"]
+  },
+  salv: {
+    name: "救恩觀", min: 5, max: 25, highSide: "left",
+    leftLabel: "加爾文", rightLabel: "亞米念",
+    zones: [
+      { min: 19, max: 25, name: "加爾文傾向", desc: "你相信得救從頭到尾都是上帝主動。你會信，是因為神先改變了你的心，所以一切都是恩典。" },
+      { min: 12, max: 18, name: "中間", desc: "你覺得兩邊都抓到一些重要的東西。也可能你比較接近路德宗：相信揀選，但不接受有人被預定滅亡。" },
+      { min: 5, max: 11, name: "亞米念傾向", desc: "你相信人得救靠恩典，但上帝給了人真實回應的能力。愛如果不能拒絕，就不太像真的愛。" }
+    ]
+  },
+  gift: {
+    name: "恩賜立場", min: 5, max: 25, highSide: "right",
+    leftLabel: "停止論", rightLabel: "續恩論",
+    zones: [
+      { min: 5, max: 11, name: "停止論", desc: "你相信神今天仍然掌權、也會回應禱告，但你對「神告訴我」非常謹慎。聖經已經足夠，是判斷一切的標準。" },
+      { min: 12, max: 18, name: "開放但謹慎", desc: "你不排除今天還有方言、預言和醫治，但你很在意查驗。不是每一句「神告訴我」都是神說的。" },
+      { min: 19, max: 25, name: "續恩論", desc: "你相信聖靈今天仍然透過方言、預言、醫治在工作。對你來說，使徒行傳不只是歷史，也是今天教會可以有的樣子。" }
+    ]
+  },
+  wors: {
+    name: "敬拜取向", min: 5, max: 25, highSide: "left",
+    leftLabel: "高教會", rightLabel: "低教會",
+    zones: [
+      { min: 19, max: 25, name: "高教會", desc: "你珍惜禮儀、聖餐和教會傳統，覺得崇拜是跟兩千年來的教會站在一起。就算那天沒什麼感覺，扎實的禮儀本身就是敬拜。" },
+      { min: 12, max: 18, name: "混合", desc: "你喜歡簡單自在的聚會，也欣賞傳統禮儀帶來的厚度。形式對你來說是工具，看情況使用。" },
+      { min: 5, max: 11, name: "低教會", desc: "對你來說，講道和聖經是崇拜的中心。形式越簡單越好，重要的是有沒有聽懂神的話。" }
+    ]
+  },
+  gov: {
+    name: "教會治理", type: "choice",
+    kinds: {
+      pastor: { name: "牧師主導", desc: "你希望教會有清楚的屬靈領袖帶方向，異象明確、執行有效率。" },
+      elder: { name: "長老制", desc: "你覺得權力應該分散在一群長老身上，彼此制衡，不是一個人說了算，也不是每件事都投票。" },
+      cong: { name: "會眾制", desc: "你覺得地方教會應該自己做主，每個信徒都是祭司，重大的事應該大家一起決定。" }
+    }
+  },
+  poli: {
+    name: "政治立場", min: 15, max: 75, highSide: "right",
+    leftLabel: "左", rightLabel: "右",
+    zones: [
+      { min: 15, max: 33, name: "偏左", desc: "你比較在意制度是不是讓某些人一直比較辛苦。看到窮人，你會先問工資、房價、教育機會和社會安全網夠不夠。" },
+      { min: 34, max: 54, name: "中間", desc: "你看議題決定立場，有些事偏左、有些事偏右，很難用一個標籤講完你。" },
+      { min: 55, max: 75, name: "偏右", desc: "你比較在意個人責任、市場和家庭的力量，擔心政府管太多。看到窮人，你會先問工作誘因和家庭支持夠不夠。" }
+    ],
+    groups: ["經濟與分配", "政府角色與照顧弱勢", "治安、環境與社會"],
+    footnote: "提醒：神學保守，不等於政治右；神學自由，也不等於政治左。"
+  }
+};
+
+/* ============================================
+   題目
+   r: true 代表反向題（計分倒過來算）
+   g: 小分組（只有神學和政治有）
+   ============================================ */
+const Q = [
+  // 神學立場 A 聖經觀
+  { a: "theo", g: 0, t: "聖經裡的歷史和科學記載，都是完全準確、沒有錯誤的。" },
+  { a: "theo", g: 0, r: true, t: "創世記前幾章可以當成詩歌或神學故事來讀，不一定要當作歷史和科學紀錄。" },
+  { a: "theo", g: 0, r: true, t: "摩西五經不一定都是摩西本人寫的，但這不影響它是神的話。" },
+  { a: "theo", g: 0, t: "讀經時，經文字面的意思通常就是神要說的，不太需要用歷史背景去重新解釋。" },
+  { a: "theo", g: 0, r: true, t: "聖經裡有些教導反映的是當時的文化限制，今天不一定要照著做。" },
+  // 神學立場 B 核心信仰
+  { a: "theo", g: 1, t: "像童女生子、耶穌身體真的復活這些信仰，如果不接受，就很難算是基督徒。" },
+  { a: "theo", g: 1, t: "福音書裡的神蹟是真實發生過的事，不只是象徵意義。" },
+  { a: "theo", g: 1, t: "耶穌是得救唯一的道路，其他宗教的人不能靠自己的宗教得救。" },
+  { a: "theo", g: 1, r: true, t: "一個人就算對某些傳統教義有懷疑，只要跟隨耶穌的愛和教導，仍然是很好的基督徒。" },
+  { a: "theo", g: 1, t: "最後的審判是真實的，不是每個人最後都會得救。" },
+  // 神學立場 C 面對現代與文化
+  { a: "theo", g: 2, t: "當新的科學或社會觀點跟傳統教導衝突時，我會先站在傳統教導這邊，而不是急著修改。" },
+  { a: "theo", g: 2, r: true, t: "教會過去有些被當成「聖經立場」的看法，其實混進了當時的文化偏見，今天應該重新檢查。" },
+  { a: "theo", g: 2, r: true, t: "演化論和基督教信仰是可以並存的。" },
+  { a: "theo", g: 2, r: true, t: "教會應該多聽被邊緣化的人（例如女性、少數族群、性少數）的經驗，來重新理解信仰。" },
+  { a: "theo", g: 2, t: "基督教有些核心不能跟著時代改，就算整個社會都不認同也一樣。" },
+
+  // 救恩觀
+  { a: "salv", t: "一個人會信耶穌，是因為上帝先改變了他的心，不然他自己不會選擇神。" },
+  { a: "salv", r: true, t: "上帝給每個人回應祂的能力，但要不要接受，是每個人自己的決定。" },
+  { a: "salv", t: "上帝在創立世界以前，就已經揀選了哪些人會得救。" },
+  { a: "salv", t: "一個真正重生得救的人，最後不會完全失去救恩。" },
+  { a: "salv", r: true, t: "耶穌在十字架上是為每一個人死的，不只是為被揀選的人。" },
+
+  // 恩賜立場
+  { a: "gift", t: "今天的基督徒仍然可能領受說方言的恩賜。" },
+  { a: "gift", r: true, t: "當有人說「神告訴我」，我通常會先保留，比較相信從聖經清楚讀出來的東西。" },
+  { a: "gift", t: "神今天仍可能透過預言或異象，對個人或教會說具體的話。" },
+  { a: "gift", r: true, t: "使徒時代的神蹟主要是為了印證福音，聖經完成後就不再是教會的常態。" },
+  { a: "gift", t: "教會裡今天仍可能有人擁有特別的醫治恩賜。" },
+
+  // 敬拜取向
+  { a: "wors", t: "我很珍惜固定的禮儀和禱文，例如一起念信經、主禱文或啟應文。" },
+  { a: "wors", t: "聖餐應該是主日崇拜的中心，最好每週都領。" },
+  { a: "wors", r: true, t: "只要講道扎實，聚會形式越簡單越好，不需要太多儀式。" },
+  { a: "wors", r: true, t: "比起禮儀，我更在意講道有沒有幫助我明白聖經。" },
+  { a: "wors", r: true, t: "崇拜的流程可以每週依需要彈性調整，不必每次都照固定程序。" },
+
+  // 教會治理（選擇題）
+  { a: "gov", t: "教會要不要花一大筆錢蓋新會堂，最後應該由誰決定？", o: [
+    ["全體會友開會投票", "cong"], ["牧師和長老組成的小會討論決定", "elder"], ["主任牧師根據異象和禱告做決定", "pastor"] ] },
+  { a: "gov", t: "新的主任牧師應該怎麼產生？", o: [
+    ["由現任主任牧師培養並指定接班人", "pastor"], ["由長老推薦，再經過中會認可", "elder"], ["會友大會投票聘請", "cong"] ] },
+  { a: "gov", t: "如果牧師的講道明顯偏離正統，誰應該出面處理？", o: [
+    ["長老們先勸誡，必要時交給中會處理", "elder"], ["母會或更資深的屬靈領袖出面處理", "pastor"], ["會友大會表決是否繼續聘任", "cong"] ] },
+  { a: "gov", t: "一間地方教會跟其他教會的關係，應該是怎樣？", o: [
+    ["跟著母會或主任牧師的異象，形成一個教會網絡", "pastor"], ["各自獨立，彼此是自由合作的夥伴", "cong"], ["透過中會、總會連結，重大事情一起決定", "elder"] ] },
+  { a: "gov", t: "教會的權柄最主要應該來自哪裡？", o: [
+    ["神呼召、膏抹的牧者，帶領整個教會", "pastor"], ["一群被選出來、彼此制衡的長老", "elder"], ["整個會眾，因為每個信徒都是祭司", "cong"] ] },
+
+  // 政治立場 A 經濟與分配
+  { a: "poli", g: 0, r: true, t: "政府應該向高收入的人多課稅，用來擴大社會福利。" },
+  { a: "poli", g: 0, t: "市場自由競爭，長期來說對大多數人是最好的。" },
+  { a: "poli", g: 0, r: true, t: "基本工資應該持續調高，保障勞工的生活。" },
+  { a: "poli", g: 0, r: true, t: "房價太高時，政府應該積極介入，例如大量蓋社會住宅或管制炒房。" },
+  { a: "poli", g: 0, t: "企業的稅應該維持在低水準，讓企業願意投資、創造工作機會。" },
+  // 政治立場 B 政府角色與照顧弱勢
+  { a: "poli", g: 1, t: "幫助窮人主要應該靠家庭、教會和民間，而不是由政府負責。" },
+  { a: "poli", g: 1, t: "一個人過得好不好，主要取決於個人努力，而不是社會制度。" },
+  { a: "poli", g: 1, r: true, t: "健保、長照這類制度，就算要多繳一些稅，也應該繼續擴大。" },
+  { a: "poli", g: 1, t: "社會福利給得太多，容易讓人失去工作的動力。" },
+  { a: "poli", g: 1, r: true, t: "政府應該保障每個人都有基本的生活水準，就算他暫時沒有工作。" },
+  // 政治立場 C 治安、環境與社會
+  { a: "poli", g: 2, t: "治安不好的時候，加重刑罰比改善社會環境更有效。" },
+  { a: "poli", g: 2, t: "台灣應該保留死刑。" },
+  { a: "poli", g: 2, r: true, t: "就算會影響經濟成長，政府也應該優先保護環境。" },
+  { a: "poli", g: 2, r: true, t: "台灣應該更開放地接納移工和新移民，並保障他們的權益。" },
+  { a: "poli", g: 2, t: "政府應該盡量少管，讓人民和民間自己決定大部分的事。" }
+];
+
+const BONUS = {
+  t: "最後一題彩蛋（不計分）：你最怕基督教失去什麼？",
+  o: [
+    "聖經權威",
+    "福音和重生",
+    "上帝主動的恩典",
+    "人的真實選擇",
+    "聖靈今天還會工作的可能",
+    "對現在人們痛苦的關心"
+  ]
+};
+
+const LIKERT = ["非常不同意", "不同意", "普通", "同意", "非常同意"];
+
+/* ============================================
+   狀態與儲存
+   ============================================ */
+const TOTAL = Q.length + 1; // 加上彩蛋題
+let state = { i: 0, ans: Array(Q.length).fill(null), bonus: null, done: false };
+
+function save() {
+  try { localStorage.setItem(CONFIG.storageKey, JSON.stringify(state)); } catch (e) {}
+}
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(CONFIG.storageKey));
+    if (s && Array.isArray(s.ans) && s.ans.length === Q.length) return s;
+  } catch (e) {}
+  return null;
+}
+function clearSave() {
+  try { localStorage.removeItem(CONFIG.storageKey); } catch (e) {}
+}
+
+/* ============================================
+   畫面切換
+   ============================================ */
+const $ = id => document.getElementById(id);
+function show(id) {
+  ["intro", "quiz", "result"].forEach(s => $(s).classList.toggle("hidden", s !== id));
+  window.scrollTo(0, 0);
+}
+
+/* ============================================
+   作答
+   ============================================ */
+function renderQ() {
+  const i = state.i;
+  const isBonus = i === Q.length;
+  const q = isBonus ? null : Q[i];
+
+  $("axisChip").textContent = isBonus ? "彩蛋" : AXES[q.a].name;
+  $("counter").textContent = `${i + 1} / ${TOTAL}`;
+  const answered = state.ans.filter(v => v !== null).length + (state.bonus !== null ? 1 : 0);
+  $("progressBar").style.width = (answered / TOTAL * 100) + "%";
+  $("qtext").textContent = isBonus ? BONUS.t : q.t;
+
+  const box = $("opts");
+  box.innerHTML = "";
+  box.className = "opts";
+
+  let items, current;
+  if (isBonus) {
+    items = BONUS.o.map((t, k) => [t, k]);
+    current = state.bonus;
+  } else if (q.o) {
+    items = q.o.map((pair, k) => [pair[0], k]);
+    current = state.ans[i];
+  } else {
+    box.classList.add("likert");
+    items = LIKERT.map((t, k) => [t, k]);
+    current = state.ans[i];
+  }
+
+  items.forEach(([label, val]) => {
+    const b = document.createElement("button");
+    b.className = "opt" + (current === val ? " sel" : "");
+    b.innerHTML = (box.classList.contains("likert") ? '<span class="dot"></span>' : "") + `<span>${label}</span>`;
+    b.onclick = () => choose(val);
+    box.appendChild(b);
+  });
+
+  $("prevBtn").disabled = i === 0;
+  const hasAns = isBonus ? state.bonus !== null : state.ans[i] !== null;
+  $("nextBtn").disabled = !hasAns;
+  $("nextBtn").textContent = isBonus ? "看結果 →" : "下一題 →";
+}
+
+function choose(val) {
+  if (state.i === Q.length) state.bonus = val;
+  else state.ans[state.i] = val;
+  save();
+  renderQ();
+  setTimeout(next, 220);
+}
+
+function next() {
+  const i = state.i;
+  const hasAns = i === Q.length ? state.bonus !== null : state.ans[i] !== null;
+  if (!hasAns) return;
+  if (i < Q.length) { state.i++; save(); renderQ(); }
+  else { state.done = true; save(); showResult(); }
+}
+function prev() {
+  if (state.i > 0) { state.i--; save(); renderQ(); }
+}
+
+/* ============================================
+   計分
+   ============================================ */
+function score() {
+  const res = {};
+  for (const key of Object.keys(AXES)) {
+    const ax = AXES[key];
+    if (ax.type === "choice") {
+      const counts = { pastor: 0, elder: 0, cong: 0 };
+      Q.forEach((q, i) => { if (q.a === key && state.ans[i] !== null) counts[q.o[state.ans[i]][1]]++; });
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      let kinds;
+      if (sorted[0][1] >= 3) kinds = [sorted[0][0]];
+      else kinds = [sorted[0][0], sorted[1][0]];
+      res[key] = { kinds, counts };
+      continue;
+    }
+    let total = 0;
+    const sub = ax.groups ? ax.groups.map(() => 0) : null;
+    Q.forEach((q, i) => {
+      if (q.a !== key) return;
+      const v = state.ans[i] + 1;
+      const s = q.r ? 6 - v : v;
+      total += s;
+      if (sub) sub[q.g] += s;
+    });
+    const zone = ax.zones.find(z => total >= z.min && total <= z.max);
+    res[key] = { total, zone, sub };
+  }
+  return res;
+}
+
+// 把分數轉成光譜上 0 到 1 的位置
+function pos(val, min, max, highSide) {
+  const x = (val - min + 0.5) / (max - min + 1);
+  return highSide === "left" ? 1 - x : x;
+}
+
+/* ============================================
+   結果頁
+   ============================================ */
+function showResult() {
+  const R = score();
+  const box = $("resCards");
+  box.innerHTML = "";
+
+  for (const key of Object.keys(AXES)) {
+    const ax = AXES[key];
+    const r = R[key];
+    const card = document.createElement("div");
+    card.className = "axis-card";
+
+    if (ax.type === "choice") {
+      const names = r.kinds.map(k => ax.kinds[k].name);
+      const title = r.kinds.length > 1 ? names.join("＋") + "（混合型）" : names[0];
+      card.innerHTML = `
+        <div class="axis-name">${ax.name}</div>
+        <div class="zone-name">${title}</div>
+        <div class="gov-chips">
+          ${Object.keys(ax.kinds).map(k => `<span class="${r.kinds.includes(k) ? "on" : ""}">${ax.kinds[k].name} ${r.counts[k]}</span>`).join("")}
+        </div>
+        <p class="desc">${r.kinds.map(k => ax.kinds[k].desc).join("<br>")}</p>
+        <p class="small">傳統上還有「主教制」，由主教監督各地教會，常見於聖公會。</p>`;
+      box.appendChild(card);
+      continue;
+    }
+
+    // 光譜分區，依照左右方向排列
+    const range = ax.max - ax.min + 1;
+    let segs = ax.zones.map(z => ({
+      z, w: (z.max - z.min + 1) / range * 100,
+      start: ax.highSide === "left" ? (ax.max - z.max) : (z.min - ax.min)
+    }));
+    segs.sort((a, b) => a.start - b.start);
+
+    const p = pos(r.total, ax.min, ax.max, ax.highSide) * 100;
+
+    let subsHtml = "";
+    if (r.sub) {
+      subsHtml = `<div class="subs">
+        ${ax.groups.map((g, k) => {
+          const sp = pos(r.sub[k], 5, 25, ax.highSide) * 100;
+          return `<div class="sub"><span>${g}</span><div class="subbar"><i style="left:${sp}%"></i></div></div>`;
+        }).join("")}
+        <div class="subpoles"><span>${ax.leftLabel}</span><span>${ax.rightLabel}</span></div>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="axis-name">${ax.name}</div>
+      <div class="zone-name">${r.zone.name}</div>
+      <div class="bar">${segs.map(s => `<div class="seg ${s.z === r.zone ? "on" : ""}" style="width:${s.w}%">${s.z.name}</div>`).join("")}</div>
+      <div class="marker-wrap"><div class="marker" style="left:${p}%"></div></div>
+      <div class="poles"><span>${ax.leftLabel}</span><span>${ax.rightLabel}</span></div>
+      <p class="desc">${r.zone.desc}</p>
+      ${subsHtml}
+      ${ax.footnote ? `<p class="small">${ax.footnote}</p>` : ""}`;
+    box.appendChild(card);
+  }
+
+  $("fearLine").textContent = state.bonus !== null ? `你最怕基督教失去的是：${BONUS.o[state.bonus]}` : "";
+  $("cardImg").classList.add("hidden");
+  $("cardHint").classList.add("hidden");
+  $("dlBtn").classList.add("hidden");
+  show("result");
+}
+
+/* ============================================
+   光譜卡（1080 x 1350，適合 IG）
+   ============================================ */
+async function makeCard() {
+  const R = score();
+  try {
+    await Promise.all([
+      document.fonts.load('900 60px "Noto Serif TC"'),
+      document.fonts.load('700 40px "Noto Sans TC"'),
+      document.fonts.load('400 30px "Noto Sans TC"')
+    ]);
+  } catch (e) {}
+
+  const W = 1080, H = 1350;
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const x = c.getContext("2d");
+  const serif = '"Noto Serif TC", serif';
+  const sans = '"Noto Sans TC", sans-serif';
+
+  x.fillStyle = "#f6f1e7"; x.fillRect(0, 0, W, H);
+
+  x.fillStyle = "#b5532f";
+  x.font = `700 28px ${sans}`;
+  x.fillText("我的基督徒光譜", 80, 120);
+  x.fillStyle = "#2b2a28";
+  x.font = `900 64px ${serif}`;
+  x.fillText("基督徒的光譜圖鑑", 80, 200);
+
+  let y = 290;
+  const rowH = 150;
+  const barX = 80, barW = W - 160, barH = 22;
+
+  for (const key of Object.keys(AXES)) {
+    const ax = AXES[key];
+    const r = R[key];
+    x.fillStyle = "#857d70";
+    x.font = `500 26px ${sans}`;
+    x.fillText(ax.name, barX, y);
+
+    let label;
+    if (ax.type === "choice") {
+      label = r.kinds.map(k => ax.kinds[k].name).join("＋");
+    } else {
+      label = r.zone.name;
+    }
+    x.fillStyle = "#b5532f";
+    x.font = `900 44px ${serif}`;
+    x.fillText(label, barX, y + 54);
+
+    if (ax.type !== "choice") {
+      const by = y + 80;
+      x.fillStyle = "#e6dac5";
+      roundRect(x, barX, by, barW, barH, 11); x.fill();
+      const p = pos(r.total, ax.min, ax.max, ax.highSide);
+      x.fillStyle = "#2b2a28";
+      x.beginPath(); x.arc(barX + p * barW, by + barH / 2, 17, 0, Math.PI * 2); x.fill();
+      x.fillStyle = "#857d70";
+      x.font = `400 22px ${sans}`;
+      x.textAlign = "left"; x.fillText(ax.leftLabel, barX, by + 56);
+      x.textAlign = "right"; x.fillText(ax.rightLabel, barX + barW, by + 56);
+      x.textAlign = "left";
+    } else {
+      x.fillStyle = "#857d70";
+      x.font = `400 24px ${sans}`;
+      const parts = Object.keys(ax.kinds).map(k => `${ax.kinds[k].name} ${r.counts[k]}`);
+      x.fillText(parts.join("　·　"), barX, y + 100);
+    }
+    y += rowH;
+  }
+
+  // 彩蛋
+  if (state.bonus !== null) {
+    x.fillStyle = "#2b2a28";
+    roundRect(x, 60, H - 210, W - 120, 100, 20); x.fill();
+    x.fillStyle = "#f6f1e7";
+    x.font = `700 32px ${sans}`;
+    x.textAlign = "center";
+    x.fillText(`我最怕基督教失去：${BONUS.o[state.bonus]}`, W / 2, H - 148);
+    x.textAlign = "left";
+  }
+
+  x.fillStyle = "#857d70";
+  x.font = `400 22px ${sans}`;
+  x.textAlign = "center";
+  x.fillText(CONFIG.podcastName + "　·　你的基督徒光譜，長什麼樣子？", W / 2, H - 50);
+  x.textAlign = "left";
+
+  const url = c.toDataURL("image/png");
+  $("cardImg").src = url;
+  $("cardImg").classList.remove("hidden");
+  $("cardHint").classList.remove("hidden");
+  $("dlBtn").href = url;
+  $("dlBtn").classList.remove("hidden");
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/* ============================================
+   啟動
+   ============================================ */
+$("kicker").textContent = CONFIG.podcastName;
+$("footer").textContent = CONFIG.podcastName + "　·　基督徒的光譜圖鑑";
+
+const saved = load();
+if (saved) {
+  if (saved.done) { state = saved; showResult(); }
+  else if (saved.ans.some(v => v !== null)) $("resumeBtn").classList.remove("hidden");
+}
+
+$("startBtn").onclick = () => {
+  state = { i: 0, ans: Array(Q.length).fill(null), bonus: null, done: false };
+  save(); show("quiz"); renderQ();
+};
+$("resumeBtn").onclick = () => { state = saved; show("quiz"); renderQ(); };
+$("prevBtn").onclick = prev;
+$("nextBtn").onclick = next;
+$("makeCardBtn").onclick = makeCard;
+$("restartBtn").onclick = () => { clearSave(); state = { i: 0, ans: Array(Q.length).fill(null), bonus: null, done: false }; show("intro"); $("resumeBtn").classList.add("hidden"); };
+</script>
+</body>
+</html>
