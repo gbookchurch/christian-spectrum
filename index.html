@@ -95,7 +95,9 @@
   .seg.on{background:var(--accent);color:#fff;font-weight:700}
   .marker-wrap{position:relative;height:14px;margin-top:2px}
   .marker{position:absolute;top:0;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:10px solid var(--ink);transform:translateX(-7px)}
-  .poles{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+  .poles{display:flex;justify-content:space-between;font-size:15px;font-weight:700}
+  .poles span:first-child, .subpoles span:first-child{color:var(--accent)}
+  .poles span:last-child, .subpoles span:last-child{color:var(--blue)}
   .desc{margin:12px 0 0;font-size:15.5px;color:#3d3a34}
   .subs{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
   .sub{display:grid;grid-template-columns:7.5em 1fr;align-items:center;gap:10px;font-size:13.5px;margin:6px 0}
@@ -688,86 +690,114 @@ async function makeCard() {
   x.fillStyle = "#ddd3c1";
   x.fillRect(PAD, 290, W - PAD * 2, 3);
 
-  // 六個軸，每列固定高度，彼此不重疊
-  let y = 360;
-  const rowH = 205;
-  const barX = PAD, barW = W - PAD * 2, barH = 20, dotR = 18;
+  // 六個軸：每一軸放在自己的卡片裡，兩端標籤和光譜條在同一行
+  const LEFT_C = "#b5532f", RIGHT_C = "#3f6b8a", INK = "#2b2a28";
+  const panelX = PAD - 20, panelW = W - (PAD - 20) * 2;
+  const panelH = 196, gap = 18, inner = 36;
+  const labelW = 120; // 兩端標籤的固定寬度，讓每條光譜一樣長
+  let y = 320;
 
   for (const key of Object.keys(AXES)) {
     const ax = AXES[key];
     const r = R[key];
 
-    // 軸名稱（左）＋結果（右，大字）
-    x.fillStyle = "#857d70";
-    x.font = `500 30px ${sans}`;
+    // 卡片底
+    x.fillStyle = "#fffdf8";
+    roundRect(x, panelX, y, panelW, panelH, 24); x.fill();
+    x.strokeStyle = "#e3d9c6"; x.lineWidth = 2;
+    roundRect(x, panelX, y, panelW, panelH, 24); x.stroke();
+
+    const left = panelX + inner, right = panelX + panelW - inner;
+
+    // 第一行：軸名稱（左）＋結果（右）
     x.textAlign = "left";
-    x.fillText(ax.name, barX, y + 30);
+    x.fillStyle = "#6f675b";
+    x.font = `700 36px ${sans}`;
+    x.fillText(ax.name, left, y + 66);
 
     const label = ax.type === "choice"
       ? r.kinds.map(k => ax.kinds[k].name).join("＋")
       : r.zone.name;
-    x.fillStyle = "#b5532f";
-    x.font = `900 52px ${serif}`;
+
+    let p = null, resultColor = INK;
+    if (ax.type !== "choice") {
+      p = pos(r.total, ax.min, ax.max, ax.highSide);
+      if (p < 0.4) resultColor = LEFT_C;
+      else if (p > 0.6) resultColor = RIGHT_C;
+    } else {
+      resultColor = LEFT_C;
+    }
+    x.fillStyle = resultColor;
     x.textAlign = "right";
-    fitText(x, label, barX + barW, y + 38, barW * 0.62, 52, `900 ? ${serif}`);
+    fitText(x, label, right, y + 72, panelW * 0.6, 60, `900 ? ${serif}`);
     x.textAlign = "left";
 
     if (ax.type !== "choice") {
-      const by = y + 82;
-      x.fillStyle = "#e6dac5";
-      roundRect(x, barX, by, barW, barH, barH / 2); x.fill();
-      let p = pos(r.total, ax.min, ax.max, ax.highSide);
-      const cx = Math.min(barX + barW - dotR, Math.max(barX + dotR, barX + p * barW));
-      x.fillStyle = "#2b2a28";
-      x.beginPath(); x.arc(cx, by + barH / 2, dotR, 0, Math.PI * 2); x.fill();
-      x.fillStyle = "#857d70";
-      x.font = `400 26px ${sans}`;
-      x.textAlign = "left"; x.fillText(ax.leftLabel, barX, by + 66);
-      x.textAlign = "right"; x.fillText(ax.rightLabel, barX + barW, by + 66);
+      // 第二行：左標籤 ── 光譜條 ── 右標籤
+      const midY = y + 140;
+      x.font = `700 34px ${sans}`;
+      x.textBaseline = "middle";
+      x.fillStyle = LEFT_C;
       x.textAlign = "left";
+      fitText(x, ax.leftLabel, left, midY, labelW, 34, `700 ? ${sans}`);
+      x.fillStyle = RIGHT_C;
+      x.textAlign = "right";
+      fitText(x, ax.rightLabel, right, midY, labelW, 34, `700 ? ${sans}`);
+      x.textAlign = "left";
+      x.textBaseline = "alphabetic";
+
+      const bx = left + labelW + 16, bw = (right - labelW - 16) - bx, bh = 26;
+      const g = x.createLinearGradient(bx, 0, bx + bw, 0);
+      g.addColorStop(0, "#e2a58c");
+      g.addColorStop(0.5, "#ece3d3");
+      g.addColorStop(1, "#9fbcd0");
+      x.fillStyle = g;
+      roundRect(x, bx, midY - bh / 2, bw, bh, bh / 2); x.fill();
+
+      const dotR = 22;
+      const cx = Math.min(bx + bw - dotR, Math.max(bx + dotR, bx + p * bw));
+      x.fillStyle = "#ffffff";
+      x.beginPath(); x.arc(cx, midY, dotR + 5, 0, Math.PI * 2); x.fill();
+      x.fillStyle = INK;
+      x.beginPath(); x.arc(cx, midY, dotR, 0, Math.PI * 2); x.fill();
     } else {
-      // 教會治理：三個小膠囊
-      let cx = barX;
-      const cy = y + 78;
-      x.font = `500 28px ${sans}`;
+      // 教會治理：三個膠囊
+      let cx = left;
+      const cy = y + 110;
+      x.font = `700 32px ${sans}`;
       for (const k of Object.keys(ax.kinds)) {
         const t = `${ax.kinds[k].name} ${r.counts[k]}`;
-        const tw = x.measureText(t).width + 44;
+        const tw = x.measureText(t).width + 48;
         const on = r.kinds.includes(k);
-        x.fillStyle = on ? "#b5532f" : "#efe6d6";
-        roundRect(x, cx, cy, tw, 56, 28); x.fill();
+        x.fillStyle = on ? LEFT_C : "#efe6d6";
+        roundRect(x, cx, cy, tw, 62, 31); x.fill();
         x.fillStyle = on ? "#ffffff" : "#5e574c";
-        x.fillText(t, cx + 22, cy + 38);
+        x.fillText(t, cx + 24, cy + 43);
         cx += tw + 16;
       }
     }
 
-    // 分隔線
-    if (key !== "poli") {
-      x.fillStyle = "#e6dac5";
-      x.fillRect(barX, y + rowH - 28, barW, 2);
-    }
-    y += rowH;
+    y += panelH + gap;
   }
 
   // 彩蛋
   if (state.bonus !== null) {
-    const boxY = H - 300, boxH = 150;
-    x.fillStyle = "#2b2a28";
-    roundRect(x, PAD - 20, boxY, W - (PAD - 20) * 2, boxH, 24); x.fill();
+    const boxY = y + 16, boxH = 160;
+    x.fillStyle = INK;
+    roundRect(x, panelX, boxY, panelW, boxH, 24); x.fill();
     x.textAlign = "center";
     x.fillStyle = "#d9cfbd";
-    x.font = `500 28px ${sans}`;
-    x.fillText("我最怕基督教失去", W / 2, boxY + 56);
+    x.font = `500 32px ${sans}`;
+    x.fillText("我最怕基督教失去", W / 2, boxY + 60);
     x.fillStyle = "#f6f1e7";
-    fitText(x, BONUS.o[state.bonus], W / 2, boxY + 112, W - PAD * 2 - 40, 44, `700 ? ${sans}`);
+    fitText(x, BONUS.o[state.bonus], W / 2, boxY + 124, panelW - 60, 52, `900 ? ${serif}`);
     x.textAlign = "left";
   }
 
   x.fillStyle = "#857d70";
   x.font = `400 26px ${sans}`;
   x.textAlign = "center";
-  x.fillText(CONFIG.podcastName + "　·　你的基督徒光譜，長什麼樣子？", W / 2, H - 80);
+  x.fillText(CONFIG.podcastName + "　·　你的基督徒光譜，長什麼樣子？", W / 2, H - 60);
   x.textAlign = "left";
 
   const url = c.toDataURL("image/png");
