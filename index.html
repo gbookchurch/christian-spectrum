@@ -765,12 +765,25 @@ function showResult() {
    ============================================ */
 async function makeCard() {
   const R = score();
+  // Google Fonts 把中文字型切成很多小段，只有「實際要用到的字」會下載。
+  // 先把光譜卡上會出現的所有文字交給瀏覽器預先載入，避免標題等文字用到備用字型。
   try {
+    const keys = Object.keys(AXES);
+    const cardText = [
+      "我的基督徒光譜", "我最怕基督教失去：", `《${CONFIG.podcastName}》`, "你的基督徒光譜，長什麼樣子？",
+      state.bonus !== null ? BONUS.o[state.bonus] : "（沒有作答）",
+      ...keys.map(k => AXES[k].name),
+      ...keys.map(k => AXES[k].type === "choice"
+        ? Object.values(AXES[k].kinds).map(v => v.name).join("＋") + "0123456789"
+        : AXES[k].zones.map(z => z.name).join("") + AXES[k].leftLabel + AXES[k].rightLabel + EDGE_NOTES[k].join(""))
+    ].join("");
     await Promise.all([
-      document.fonts.load('900 60px "Noto Serif TC"'),
-      document.fonts.load('700 40px "Noto Sans TC"'),
-      document.fonts.load('400 30px "Noto Sans TC"')
+      document.fonts.load('900 60px "Noto Serif TC"', cardText),
+      document.fonts.load('700 40px "Noto Sans TC"', cardText),
+      document.fonts.load('500 30px "Noto Sans TC"', cardText),
+      document.fonts.load('400 30px "Noto Sans TC"', cardText)
     ]);
+    await document.fonts.ready;
   } catch (e) {}
 
   const W = 1080, H = 1920;
