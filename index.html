@@ -134,7 +134,6 @@
   .zlabels{display:flex;margin-top:8px}
   .zlabels span{text-align:center;font-size:12px;color:var(--zl);white-space:nowrap;line-height:1.4}
   .zlabels span.on{color:var(--axt);font-weight:700}
-  .poles{display:flex;justify-content:space-between;font-size:12px;font-weight:500;margin-top:4px;color:var(--pole)}
   .desc{margin:14px 0 0;font-size:15.5px;color:#3d3a34}
   .subs{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
   .sub{display:grid;grid-template-columns:7.5em 1fr;align-items:center;gap:10px;font-size:13.5px;margin:6px 0}
@@ -743,7 +742,6 @@ function showResult() {
           <div class="you" style="left:${p}%"><span class="you-tag${tagCls}">你在這裡</span></div>
         </div>
         <div class="zlabels">${segs.map(s => `<span class="${s.z === r.zone ? "on" : ""}" style="width:${s.w}%">${s.z.name}</span>`).join("")}</div>
-        <div class="poles"><span>← ${ax.leftLabel}</span><span>${ax.rightLabel} →</span></div>
       </div>
       <p class="desc">${r.zone.desc}</p>
       ${subsHtml}
@@ -787,31 +785,38 @@ async function makeCard() {
   x.textBaseline = "alphabetic";
 
   // 標題
-  x.textAlign = "left";
+  x.textAlign = "center";
   x.fillStyle = "#b5532f";
   x.font = `700 30px ${sans}`;
-  x.fillText(CONFIG.podcastName + "　·　基督徒的光譜圖鑑", PAD, 130);
+  x.fillText(`歡迎收聽 最有趣的基督教Podcast - ${CONFIG.podcastName}`, W / 2, 132);
   x.fillStyle = INK;
-  x.font = `900 84px ${serif}`;
-  x.fillText("我的基督徒光譜", PAD, 228);
+  x.font = `900 72px ${serif}`;
+  x.fillText("我的基督徒光譜", W / 2, 222);
+  x.textAlign = "left";
   x.fillStyle = ORANGE;
-  roundRect(x, PAD, 262, 64, 6, 3); x.fill();
+  roundRect(x, W / 2 - 32, 254, 64, 6, 3); x.fill();
 
   // 六條簡化光譜
   const top = 320, rowH = 170;
-  const barX = PAD, barW = W - PAD * 2, barH = 16;
+  const barX = PAD, barW = W - PAD * 2, barH = 44;
   const AXIS_KEYS = Object.keys(AXES);
   AXIS_KEYS.forEach((key, idx) => {
     const ax = AXES[key], r = R[key], st = AXIS_STYLE[key];
     const ry = top + idx * rowH;
 
+    // 第 2、4、6 條（救恩觀、敬拜取向、政治立場）加深底色，做出分行的閱讀節奏
+    if (idx % 2 === 1) {
+      x.fillStyle = "#f0e9dc"; // 米白底色加深約 5%
+      roundRect(x, PAD - 28, ry - 2, W - (PAD - 28) * 2, rowH, 20); x.fill();
+    }
+
     // 軸名稱（左，前面一個輔助色小圓點）
     x.fillStyle = st.c;
-    x.beginPath(); x.arc(PAD + 9, ry + 45, 9, 0, Math.PI * 2); x.fill();
+    x.beginPath(); x.arc(PAD + 9, ry + 40, 9, 0, Math.PI * 2); x.fill();
     x.textAlign = "left";
     x.fillStyle = MUTED;
     x.font = `700 34px ${sans}`;
-    x.fillText(ax.name, PAD + 30, ry + 57);
+    x.fillText(ax.name, PAD + 30, ry + 52);
 
     // 主要分類（右，大字）
     const label = ax.type === "choice"
@@ -819,7 +824,7 @@ async function makeCard() {
       : r.zone.name;
     x.fillStyle = INK;
     x.textAlign = "right";
-    fitText(x, label, W - PAD, ry + 64, 560, 62, `900 ? ${serif}`);
+    fitText(x, label, W - PAD, ry + 56, 560, 52, `900 ? ${serif}`);
     x.textAlign = "left";
 
     if (ax.type === "choice") {
@@ -839,7 +844,7 @@ async function makeCard() {
       }
     } else {
       // 光譜條：分區色塊＋目前所在區塊用輔助色
-      const midY = ry + 106;
+      const midY = ry + 102;
       const range = ax.max - ax.min + 1;
       const segs = ax.zones.map(z => ({
         z, w: (z.max - z.min + 1) / range,
@@ -850,7 +855,7 @@ async function makeCard() {
       let sx = barX;
       segs.forEach((sg, k) => {
         const w = sg.w * barW;
-        x.fillStyle = sg.z === r.zone ? hexA(st.c, 0.38) : (k % 2 ? "#e8dfcd" : "#efe7d8");
+        x.fillStyle = sg.z === r.zone ? hexA(st.c, 0.42) : (k % 2 ? "#f3ede2" : "#faf6ef");
         x.fillRect(sx, midY - barH / 2, w + 1, barH);
         sx += w;
       });
@@ -858,19 +863,30 @@ async function makeCard() {
 
       // 你的位置
       const p = pos(r.total, ax.min, ax.max, ax.highSide);
-      const dotR = 19;
+      const dotR = 19, ring = 6;
       const cx = Math.min(barX + barW - dotR, Math.max(barX + dotR, barX + p * barW));
+
+      // 兩端名稱放進光譜條左右兩端；圓點蓋到時，名稱改排在圓點內側旁邊
+      x.font = `700 24px ${sans}`;
+      x.textBaseline = "middle";
+      x.fillStyle = POLE;
+      const inset = 20, gapToDot = 12;
+      const lw = x.measureText(ax.leftLabel).width;
+      let lx = barX + inset;
+      if (cx - dotR - ring < lx + lw + 6 && cx + dotR + ring > lx - 6) lx = cx + dotR + ring + gapToDot;
+      x.textAlign = "left";
+      x.fillText(ax.leftLabel, lx, midY + 1);
+      const rw = x.measureText(ax.rightLabel).width;
+      let rx = barX + barW - inset;
+      if (cx + dotR + ring > rx - rw - 6 && cx - dotR - ring < rx + 6) rx = cx - dotR - ring - gapToDot;
+      x.textAlign = "right";
+      x.fillText(ax.rightLabel, rx, midY + 1);
+      x.textBaseline = "alphabetic";
+
       x.fillStyle = "#fffdf8";
-      x.beginPath(); x.arc(cx, midY, dotR + 6, 0, Math.PI * 2); x.fill();
+      x.beginPath(); x.arc(cx, midY, dotR + ring, 0, Math.PI * 2); x.fill();
       x.fillStyle = st.c;
       x.beginPath(); x.arc(cx, midY, dotR, 0, Math.PI * 2); x.fill();
-
-      // 兩端名稱
-      x.font = `700 26px ${sans}`;
-      x.fillStyle = POLE; x.textAlign = "left";
-      x.fillText(ax.leftLabel, barX, ry + 152);
-      x.fillStyle = POLE; x.textAlign = "right";
-      x.fillText(ax.rightLabel, barX + barW, ry + 152);
 
       // 非常靠邊：中間放一個小膠囊
       const note = edgeNote(key, r.total);
@@ -879,18 +895,13 @@ async function makeCard() {
         const tw = x.measureText(note).width + 32;
         const bx = W / 2 - tw / 2;
         x.fillStyle = st.s;
-        roundRect(x, bx, ry + 128, tw, 34, 17); x.fill();
+        roundRect(x, bx, ry + 130, tw, 30, 15); x.fill();
         x.fillStyle = st.t; x.textAlign = "center";
         x.fillText(note, W / 2, ry + 153);
       }
       x.textAlign = "left";
     }
 
-    // 分隔細線
-    if (idx < AXIS_KEYS.length - 1) {
-      x.fillStyle = "#e3d9c6";
-      x.fillRect(PAD, ry + rowH - 4, barW, 2);
-    }
   });
 
   // 彩蛋：我最怕基督教失去
@@ -898,7 +909,8 @@ async function makeCard() {
   x.save();
   x.shadowColor = "rgba(160,75,30,0.14)"; x.shadowBlur = 36; x.shadowOffsetY = 10;
   x.fillStyle = ORANGE;
-  roundRect(x, PAD, fy, W - PAD * 2, fh, 30); x.fill();
+  // 寬度跟上方分行底色一致（左右各比內容多出 28px）
+  roundRect(x, PAD - 28, fy, W - (PAD - 28) * 2, fh, 30); x.fill();
   x.restore();
   x.textAlign = "center";
   x.fillStyle = "#fde6da";
