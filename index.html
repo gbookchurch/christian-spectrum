@@ -786,9 +786,6 @@ async function makeCard() {
 
   // 標題
   x.textAlign = "center";
-  x.fillStyle = "#b5532f";
-  x.font = `700 30px ${sans}`;
-  x.fillText(`歡迎收聽 最有趣的基督教Podcast - ${CONFIG.podcastName}`, W / 2, 132);
   x.fillStyle = INK;
   x.font = `900 72px ${serif}`;
   x.fillText("我的基督徒光譜", W / 2, 222);
@@ -922,10 +919,10 @@ async function makeCard() {
   // 頁尾
   x.fillStyle = INK;
   x.font = `900 40px ${serif}`;
-  x.fillText(`《${CONFIG.podcastName}》`, W / 2, H - 140);
+  x.fillText(`《${CONFIG.podcastName}》`, W / 2, H - 196);
   x.fillStyle = "#857d70";
   x.font = `400 30px ${sans}`;
-  x.fillText("你的基督徒光譜，長什麼樣子？", W / 2, H - 86);
+  x.fillText("你的基督徒光譜，長什麼樣子？", W / 2, H - 142);
   x.textAlign = "left";
 
   const url = c.toDataURL("image/png");
