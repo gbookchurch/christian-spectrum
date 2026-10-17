@@ -67,7 +67,7 @@
   .chip{background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:999px;padding:3px 12px;font-size:13px;display:inline-flex;align-items:center;gap:6px}
   .chip i{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
   .progress{height:6px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:28px}
-  .progress > div{height:100%;background:var(--accent);width:0;transition:width .25s}
+  .progress > div{height:100%;background:var(--accent);width:0;transition:width .25s, background-color .35s ease}
   .qtext{font-family:"Noto Serif TC",serif;font-size:23px;line-height:1.55;font-weight:700;margin:6px 0 26px;min-height:110px}
   .opts{display:flex;flex-direction:column;gap:10px}
   .opt{
@@ -506,6 +506,8 @@ function renderQ() {
   $("counter").textContent = `${i + 1} / ${TOTAL}`;
   const answered = state.ans.filter(v => v !== null).length + (state.bonus !== null ? 1 : 0);
   $("progressBar").style.width = (answered / TOTAL * 100) + "%";
+  // 進度條顏色跟著目前主題的品牌色；彩蛋題用主色橘
+  $("progressBar").style.background = isBonus ? "var(--orange)" : AXIS_STYLE[q.a].c;
   $("qtext").textContent = isBonus ? BONUS.t : q.t;
 
   const box = $("opts");
