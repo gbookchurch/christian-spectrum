@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>基督徒的光譜圖鑑：你是哪一種？</title>
-<meta name="description" content="53 題，看看你在神學、救恩觀、恩賜、敬拜、教會治理和政治上的位置。">
+<meta name="description" content="57 題，看看你在神學、救恩觀、恩賜、敬拜、教會治理和政治上的位置。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
@@ -320,12 +320,12 @@ const AXES = {
     groups: ["聖經觀", "核心信仰", "面對現代與文化"]
   },
   salv: {
-    name: "救恩觀", min: 6, max: 30, highSide: "left",
+    name: "救恩觀", min: 7, max: 35, highSide: "left",
     leftLabel: "加爾文", rightLabel: "亞米念",
     zones: [
-      { min: 23, max: 30, name: "加爾文傾向", desc: "得救從頭到尾都是上帝主動。你會信主，是因為神先改變了你的心，所以全都是恩典。" },
-      { min: 14, max: 22, name: "中間", desc: "你覺得兩邊都有道理，也各自抓到一些重點。也許你比較接近路德宗的看法：相信揀選，但不認為有人被預定滅亡。" },
-      { min: 6, max: 13, name: "亞米念傾向", desc: "人得救靠的是恩典，這點你很確定。只是你也相信，上帝給了人真實回應的能力。愛如果不能拒絕，還算是愛嗎？" }
+      { min: 27, max: 35, name: "加爾文傾向", desc: "得救從頭到尾都是上帝主動。你會信主，是因為神先改變了你的心，所以全都是恩典。" },
+      { min: 16, max: 26, name: "中間", desc: "你覺得兩邊都有道理，也各自抓到一些重點。也許你比較接近路德宗的看法：相信揀選，但不認為有人被預定滅亡。" },
+      { min: 7, max: 15, name: "亞米念傾向", desc: "人得救靠的是恩典，這點你很確定。只是你也相信，上帝給了人真實回應的能力。愛如果不能拒絕，還算是愛嗎？" }
     ]
   },
   gift: {
@@ -338,12 +338,12 @@ const AXES = {
     ]
   },
   wors: {
-    name: "敬拜取向", min: 5, max: 25, highSide: "left",
+    name: "敬拜取向", min: 6, max: 30, highSide: "left",
     leftLabel: "高教會", rightLabel: "低教會",
     zones: [
-      { min: 19, max: 25, name: "高教會", desc: "你珍惜禮儀、聖餐和教會傳統，覺得每次崇拜都是跟兩千年來的教會站在一起。就算那天沒什麼感覺，扎實的禮儀本身就是敬拜。" },
-      { min: 12, max: 18, name: "混合", desc: "你喜歡簡單自在的聚會，也欣賞傳統禮儀的厚度。你不太會只認定一種形式，適合就好。" },
-      { min: 5, max: 11, name: "低教會", desc: "講道和聖經是崇拜的中心。形式越簡單越好，重點是有沒有聽懂神的話。" }
+      { min: 23, max: 30, name: "高教會", desc: "你珍惜禮儀、聖餐和教會傳統，覺得每次崇拜都是跟兩千年來的教會站在一起。就算那天沒什麼感覺，扎實的禮儀本身就是敬拜。" },
+      { min: 14, max: 22, name: "混合", desc: "你喜歡簡單自在的聚會，也欣賞傳統禮儀的厚度。你不太會只認定一種形式，適合就好。" },
+      { min: 6, max: 13, name: "低教會", desc: "講道和聖經是崇拜的中心。形式越簡單越好，重點是有沒有聽懂神的話。" }
     ]
   },
   gov: {
@@ -355,12 +355,12 @@ const AXES = {
     }
   },
   poli: {
-    name: "政治立場", min: 16, max: 80, highSide: "right",
+    name: "政治立場", min: 18, max: 90, highSide: "right",
     leftLabel: "左", rightLabel: "右",
     zones: [
-      { min: 16, max: 35, name: "偏左", desc: "你比較會注意，一個人過得辛苦是不是也跟制度有關。看到窮人，你會先想到工資、房價、教育機會和社會安全網夠不夠。" },
-      { min: 36, max: 60, name: "中間", desc: "你比較看事情本身。有些議題偏左，有些偏右，要用一個標籤把你講完其實不太容易。" },
-      { min: 61, max: 80, name: "偏右", desc: "你比較看重個人責任、市場機制和家庭能發揮的作用，也擔心政府管太多。看到窮人，你會先問工作的動力和家人的支持夠不夠。" }
+      { min: 18, max: 39, name: "偏左", desc: "你比較會注意，一個人過得辛苦是不是也跟制度有關。看到窮人，你會先想到工資、房價、教育機會和社會安全網夠不夠。" },
+      { min: 40, max: 68, name: "中間", desc: "你比較看事情本身。有些議題偏左，有些偏右，要用一個標籤把你講完其實不太容易。" },
+      { min: 69, max: 90, name: "偏右", desc: "你比較看重個人責任、市場機制和家庭能發揮的作用，也擔心政府管太多。看到窮人，你會先問工作的動力和家人的支持夠不夠。" }
     ],
     groups: ["經濟與分配", "政府角色與照顧弱勢", "社會與能源議題"],
     footnote: "提醒：神學保守，不等於政治右；神學自由，也不等於政治左。"
@@ -396,6 +396,7 @@ const Q = [
   { a: "salv", t: "一個人會信耶穌，是因為上帝先改變了他的心，不然他自己不會選擇神。" },
   { a: "salv", r: true, t: "上帝給每個人回應祂的能力，但要不要接受，是每個人自己的決定。" },
   { a: "salv", t: "上帝在創立世界以前，就已經揀選了哪些人會得救。" },
+  { a: "salv", r: true, t: "耶穌在十字架上，不是只為最後會得救的人而死。" },
   { a: "salv", t: "假設一個人18歲時真心信主、受洗，也服事很多年，後來卻完全否認信仰，直到過世。我比較傾向認為：他後來離開，可能表示他當初並沒有真正重生。" },
   { a: "salv", r: true, t: "兩個人都聽到福音，也都有機會相信，最後一個接受、一個拒絕，我認為這個差別可以真的來自他們自己的選擇。" },
   { a: "salv", r: true, t: "上帝揀選人，是因為祂預先知道誰會選擇相信祂。" },
@@ -411,6 +412,7 @@ const Q = [
   // 敬拜取向
   { a: "wors", t: "我覺得聖餐應該由按立的牧者主持，不是任何人都可以。" },
   { a: "wors", t: "聖餐應該是主日崇拜的中心，最好每週都領。" },
+  { a: "wors", t: "主日崇拜最好有固定的流程和禱告內容，不需要每週都重新設計。" },
   { a: "wors", r: true, t: "只要講道扎實，聚會形式越簡單越好，不需要太多儀式。" },
   { a: "wors", r: true, t: "比起禮儀，我更在意講道有沒有幫助我明白聖經。" },
   { a: "wors", t: "就算一場崇拜沒有讓我特別感動，只要有忠實的禱告、讀經、講道和聖餐，我仍會覺得這是一場完整的敬拜。" },
@@ -443,6 +445,8 @@ const Q = [
   // 政治立場 C 社會與能源議題
   { a: "poli", g: 2, t: "胎兒從受孕那一刻起就是一個人，應該受到跟出生後一樣的法律保護。" },
   { a: "poli", g: 2, r: true, t: "懷孕初期要不要繼續懷孕，最後應該由懷孕的女性自己決定。" },
+  { a: "poli", g: 2, t: "對重大暴力犯罪，政府應該採取更嚴格的刑罰，即使這不一定能解決犯罪背後的社會原因。" },
+  { a: "poli", g: 2, t: "政府應該更嚴格限制外來人口進入台灣，即使這可能讓一些真正需要幫助的人更難進來。" },
   { a: "poli", g: 2, t: "穩定又便宜的電價，比加快減碳轉型更重要。" },
   { a: "poli", g: 2, t: "政府應該盡量少介入宗教團體的內部事務，例如教會怎麼選牧師、怎麼管理財務。" },
   { a: "poli", g: 2, t: "再生能源的發展應該主要交給市場決定，政府不應該用大量補貼或管制去推動。" }
@@ -521,7 +525,7 @@ function renderQ() {
     chip.innerHTML = `<i></i>${AXES[q.a].name}`;
     chip.style.background = AXIS_STYLE[q.a].s; chip.style.color = AXIS_STYLE[q.a].t;
   }
-  $("counter").textContent = `${i + 1} / ${TOTAL}`;
+  $("counter").textContent = isBonus ? "彩蛋題" : `${i + 1} / ${Q.length}`;
   const answered = state.ans.filter(v => v !== null).length + (state.bonus !== null ? 1 : 0);
   $("progressBar").style.width = (answered / TOTAL * 100) + "%";
   // 進度條顏色跟著目前主題的品牌色；彩蛋題用主色橘
