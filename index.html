@@ -191,6 +191,16 @@
   .consent{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink-2);margin-top:6px}
   .consent input{width:20px;height:20px;margin-top:3px;accent-color:var(--accent);flex:none}
 
+  .mobile-save-hint{display:none}
+  .desktop-save-hint{display:inline}
+
+  /* 手機版：結果圖片用長按儲存，不顯示下載按鈕 */
+  @media (max-width:768px){
+    #dlBtn{display:none !important}
+    .mobile-save-hint{display:inline}
+    .desktop-save-hint{display:none}
+  }
+
   @media (max-width:420px){
     .qtext{font-size:20px;min-height:120px}
     .zone-name{font-size:30px}
@@ -276,7 +286,7 @@
     <div class="share">
       <button class="btn wide-btn" id="makeCardBtn">產生我的光譜卡</button>
       <img id="cardImg" class="hidden" alt="我的光譜卡">
-      <div id="cardHint" class="small hidden">手機可以長按圖片儲存，電腦可以按下面的按鈕下載。</div>
+      <div id="cardHint" class="small hidden"><span class="mobile-save-hint">手機可以長按圖片儲存。</span><span class="desktop-save-hint">電腦可以按下面的按鈕下載圖片。</span></div>
       <div class="btn-stack">
         <a class="btn secondary wide-btn hidden" id="dlBtn" download="我的基督徒光譜.png">下載圖片</a>
         <button class="btn secondary wide-btn" id="restartBtn">重新作答</button>
